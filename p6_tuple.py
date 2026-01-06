@@ -2,11 +2,11 @@
 #NAME=KRISHNADEEPSINH
 #DATE=6/1/2026
 
-nations=('INDIA','RUSSIA','UNITED STATE','CHINA','GERMANY','JAPAN')
+nation=('INDIA','RUSSIA','UNITED STATE','CHINA','GERMANY','JAPAN')
 boxes=(100,'BHAVNAGAR',True,None,3.14)
 
 #print tuple 
-print(nations)
+print(nation)
 print(boxes)
 
 #print specfic index
@@ -25,18 +25,17 @@ print(nation[2:])
 print(boxes[3:])
 
 #find postion of tuple 
-print("POSTION OF INDIA : "nation.index('INDIA'))
-print("POSTION OF BHAVNAGAR : "boxes.index('BHAVNAGAR'))
+print("POSTION OF INDIA : ",nation.index('INDIA'))
+print("POSTION OF BHAVNAGAR : ",boxes.index('BHAVNAGAR'))
 
 #COUNT SPECFIC VALUES OF TUPLE
 
-print("COUNT OF INDIA IN TUPLE : "nation.COUNT('INDIA'))
-print(" COUNT OF BHAVNAGAR IN TUPLE : "boxes.count('BHAVNAGAR'))
+print("COUNT OF INDIA IN TUPLE : ",nation.count('INDIA'))
+print(" COUNT OF BHAVNAGAR IN TUPLE : ",boxes.count('BHAVNAGAR'))
 
 #PRINT LIST TWICE 
 
 print(boxes*2)
 
 #CONCATE 2 TUPLE 
-
 print(nation+boxes)
