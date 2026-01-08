@@ -1,5 +1,7 @@
 #write a program to convert given 3 digit amount into words
 # input : 175 output : one hundred seventy five
+#NAME:KRISHNADEEPSINH
+#DATE:8/1/26
 
 #Getting amount
 amount = input("Enter 3 digit amount: ")
@@ -32,5 +34,6 @@ unit = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nin
          'eighty five', 'eighty six', 'eighty seven', 'eighty eight', 'eighty nine',
          'ninety', 'ninety one', 'ninety two', 'ninety three', 'ninety four',
          'ninety five', 'ninety six', 'ninety seven', 'ninety eight', 'ninety nine']
+
 
 print(hundreds[frist], unit[last])
