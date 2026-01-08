@@ -1,6 +1,7 @@
 #write a program to convert given 3 digit amount into words
 # input : 175 output : one seven five 
-
+#NAME:KRISHNADEEPSINH
+#DATE:8/1/26
 
 
 amount = input("Enter Amount :") #GETTING NUMBER
@@ -19,4 +20,5 @@ print(fd,md,ld)
 
 #LIST OF WORDS
 words=['zero','one','two','three','four','five','six','seven','eight','nine']
+
 print(words[fd]+" "+words[md]+" "+words[ld])
