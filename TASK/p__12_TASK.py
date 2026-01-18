@@ -1,4 +1,4 @@
-#12. From a dictionary, extract only the keys into a list.
+ #12. From a dictionary, extract only the keys into a list.
 #NAME=KRISHNADEEPSINH
 #DATE=11/1/26
 
