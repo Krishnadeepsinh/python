@@ -15,10 +15,11 @@ time=int(input("ENTER THE TIME IN HOUR FROM 1 TO 24 : "))
 am='am'
 pm='pm'
 
-if time<=12:
+if time>0 and time<=12:
        print("TIME IN HOURS IS : ",time," ",am)
 if time>12 and time<=24:
        print("TIME IN HOURS IS : ",time-12," ",pm)
 if time>24:
        print('INVAILD TIME ')
+
        
