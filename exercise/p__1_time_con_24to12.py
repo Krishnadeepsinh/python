@@ -8,6 +8,7 @@
         input : 25 hours 
         output  invalid input '''
 
+
 #NAME:KRISHNADEEPSINH
 #DATE:19/1/26
 
@@ -19,7 +20,5 @@ if time>0 and time<=12:
        print("TIME IN HOURS IS : ",time," ",am)
 if time>12 and time<=24:
        print("TIME IN HOURS IS : ",time-12," ",pm)
-if time>24:
+if time>24 or time==0:
        print('INVAILD TIME ')
-
-       
