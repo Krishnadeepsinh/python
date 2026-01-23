@@ -53,9 +53,10 @@ elif (dob_date>=20 and dob_month==1) or (dob_date<=18 and dob_month==2) :
 
 
 elif (dob_date>=19 and dob_month==2) or (dob_date<=20 and dob_month==3) :
-    print("AQUARIUS")
+    print("PISCES")
 
 
 else:
 
     print("INVAILD DOB ")
+
