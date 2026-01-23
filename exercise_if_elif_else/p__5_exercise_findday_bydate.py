@@ -13,3 +13,4 @@ days=["Sunday","Monday","Tuesday","Wednesday","Thrsday","Friday","Sunday"] #days
 result= year+lis[month]+date_day
 result%=7
 print(days[result])
+
