@@ -3,6 +3,9 @@
 #def function-name(parameters):
 #example 
 
+
+
+
 def getSquare(number): 
     square= number * number
     return square
@@ -16,4 +19,7 @@ result=getSquare(n1)
 print(f"CUBE OF {n1} IS : {result}")
 
 result1=getCube(n1)
+
 print(f"CUBE OF {n1} IS : {result1}")
+
+
