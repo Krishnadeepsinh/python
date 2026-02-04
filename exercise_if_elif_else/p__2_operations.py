@@ -1,3 +1,5 @@
+
+
 #2) write a program to accept 2 number from user. and accept choice for operations.
 #operations will be addition, subtraction, multiplication, division
 #do operation and display result as per user choice about operation using if elif else statements.
@@ -21,3 +23,5 @@ elif ch==4:
     print(f"DIVISION OF {no1} / {no2}={no1/no2}")
 else:
     print("INVAILD INPUT")
+
+
