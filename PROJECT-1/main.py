@@ -51,18 +51,18 @@ rashi = get_chandra_rashi(USER_DOB)
 # 3) RASHI → URL MAP
 # -------------------------------
 RASHI_URLS = {
-    "mesh": "https://www.divyabhaskar.co.in/rashifal/1/today",
-    "vrushabh": "https://www.divyabhaskar.co.in/rashifal/2/today",
-    "mithun": "https://www.divyabhaskar.co.in/rashifal/3/today",
-    "kark": "https://www.divyabhaskar.co.in/rashifal/4/today",
-    "singh": "https://www.divyabhaskar.co.in/rashifal/5/today",
-    "kanya": "https://www.divyabhaskar.co.in/rashifal/6/today",
-    "tula": "https://www.divyabhaskar.co.in/rashifal/7/today",
-    "vrushchik": "https://www.divyabhaskar.co.in/rashifal/8/today",
-    "dhanu": "https://www.divyabhaskar.co.in/rashifal/9/today",
-    "makar": "https://www.divyabhaskar.co.in/rashifal/10/today",
-    "kumbh": "https://www.divyabhaskar.co.in/rashifal/11/today",
-    "meen": "https://www.divyabhaskar.co.in/rashifal/12/today",
+    "mesh": "https://www.divyabhaskar.co.in/rashifal/13/today",
+    "vrushabh": "https://www.divyabhaskar.co.in/rashifal/14/today",
+    "mithun": "https://www.divyabhaskar.co.in/rashifal/15/today",
+    "kark": "https://www.divyabhaskar.co.in/rashifal/16/today",
+    "singh": "https://www.divyabhaskar.co.in/rashifal/17/today",
+    "kanya": "https://www.divyabhaskar.co.in/rashifal/18/today",
+    "tula": "https://www.divyabhaskar.co.in/rashifal/19/today",
+    "vrushchik": "https://www.divyabhaskar.co.in/rashifal/20/today",
+    "dhanu": "https://www.divyabhaskar.co.in/rashifal/21/today",
+    "makar": "https://www.divyabhaskar.co.in/rashifal/22/today",
+    "kumbh": "https://www.divyabhaskar.co.in/rashifal/23/today",
+    "meen": "https://www.divyabhaskar.co.in/rashifal/24/today",
 }
 
 url = RASHI_URLS[rashi]
