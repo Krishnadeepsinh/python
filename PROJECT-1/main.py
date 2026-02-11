@@ -5,7 +5,6 @@ import os
 import pygame
 import time
 from datetime import datetime, date
-
 # -------------------------------
 # 1) USER DETAILS (CHANGE THIS)
 # -------------------------------
@@ -127,3 +126,4 @@ try:
 
 except Exception as e:
     print("Error:", e)
+
