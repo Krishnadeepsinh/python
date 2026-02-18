@@ -3,7 +3,9 @@
 
 no=int(input("ENTER THE NUMBER : "))
 
-while no>=0:
+while no>=0: 
+    
     
     print(no,end=' ')
+
     no-=5
