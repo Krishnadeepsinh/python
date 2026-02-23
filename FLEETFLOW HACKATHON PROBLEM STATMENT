@@ -92,3 +92,251 @@ Frontend: Modular UI with scannable data tables and status pills.
 Backend: Real-time state management for vehicle/driver availability.
 
 Database: Relational structure to link Expenses/Trips to a specific Vehicle ID.
+
+
+------------------------------------------------------------------
+prd 
+
+# Product Requirements Document (PRD): FleetFlow Digital Hub
+
+## 1. Executive Summary
+
+**Project Name:** FleetFlow Digital Hub
+
+**Objective:** To transition from manual, error-prone logbooks to a centralized, rule-based digital ecosystem. The platform optimizes vehicle lifecycles, ensures driver safety compliance, and provides real-time financial transparency for fleet operations.
+
+---
+
+## 2. User Personas
+
+| Persona | Primary Goals | Key Pain Points |
+| --- | --- | --- |
+| **Fleet Manager** | Maximize asset uptime and ROI. | Unscheduled downtime, aging assets. |
+| **Dispatcher** | Efficiently assign loads and drivers. | Overloading vehicles, double-booking. |
+| **Safety Officer** | Ensure 100% legal compliance. | Expired licenses, risky driver behavior. |
+| **Financial Analyst** | Audit operational spend and fuel costs. | Hidden costs, manual data entry errors. |
+
+---
+
+## 3. Functional Requirements by Module
+
+### 3.1. Authentication & RBAC
+
+* **Secure Login:** Email/Password authentication with "Forgot Password" workflow.
+* **Role-Based Access Control (RBAC):** * *Managers:* Full CRUD (Create, Read, Update, Delete) access.
+* *Dispatchers:* Access to Registry and Trip Management.
+* *Analysts:* Read-only access to Analytics and Financials.
+
+
+
+### 3.2. Command Center (Dashboard)
+
+A high-level oversight hub featuring real-time KPIs and global filters (Region, Vehicle Type).
+
+* **KPI Tiles:** Active Fleet (On Trip), Maintenance Alerts (In Shop), Utilization Rate (%), and Pending Cargo.
+* **Visualization:** Status distribution charts for quick resource assessment.
+
+### 3.3. Asset & Driver Registry
+
+* **Vehicle CRUD:** Track Model, License Plate, Max Capacity, and Odometer.
+* **Driver Profiles:** Manage status (On Duty/Off Duty/Suspended) and track License Expiration.
+* **Validation Logic:** * Drivers with expired licenses are automatically flagged and blocked from trip assignments.
+* Manual "Out of Service" toggle for permanent retirement of assets.
+
+
+
+### 3.4. Trip Dispatcher & Lifecycle
+
+The core operational engine for moving goods.
+
+* **Constraint Engine:** System must validate  before allowing dispatch.
+* **Workflow States:** `Draft` → `Dispatched` → `Completed` → `Cancelled`.
+* **Availability Logic:** Selecting a vehicle/driver for a trip moves their status to "On Trip," removing them from the available pool.
+
+---
+
+## 4. Logical Workflows & Business Rules
+
+The system relies on automated state changes to prevent human error.
+
+### 4.1. The Maintenance Loop
+
+When a Manager logs a service entry (e.g., "Oil Change"), the following automation triggers:
+
+1. **Status Change:** Vehicle status updates to `In Shop`.
+2. **Dispatcher Lock:** The vehicle is instantly hidden from the "Available Vehicles" list in the Trip Dispatcher.
+3. **Release:** Only closing the service log returns the vehicle to `Available`.
+
+### 4.2. Trip Completion & Analytics
+
+Upon marking a trip as `Completed`:
+
+* **Odometer Sync:** The vehicle’s global odometer is updated.
+* **Financial Calculation:** The system links fuel logs and maintenance costs to the specific Vehicle ID to calculate ROI.
+
+---
+
+## 5. Technical & Data Requirements
+
+### 5.1. Data Models (Relational Structure)
+
+To ensure data integrity, the database must link all entities to the **Vehicle ID**.
+
+### 5.2. Formulas & Analytics
+
+The system will automate the following calculations for the Analytics Page:
+
+* **Fuel Efficiency:** 
+
+* **Vehicle ROI:** 
+
+
+---
+
+## 6. Non-Functional Requirements
+
+* **Usability:** Modular UI using "Status Pills" (e.g., Green for `Available`, Red for `In Shop`) for instant scannability.
+* **Integrity:** Prevent deletion of vehicles that have active trip histories (Soft-delete only).
+* **Portability:** One-click exports for PDF/CSV to support external audits and payroll.
+
+---
+7. User Acceptance Testing (UAT) Checklist
+
+The following UAT scenarios are designed to validate that the digital hub’s automated logic effectively replaces manual logbooks and enforces operational rules.
+7.1. Asset & Driver Setup
+Test Case ID	Feature	Scenario	Expected Result
+UAT-01	Vehicle Intake	Add a new vehicle with a 5,000kg capacity.	Vehicle appears in Registry as Available.
+UAT-02	Compliance	Add a driver with a license expiration date in the past.	System flags the driver as Non-Compliant and prevents trip assignment.
+UAT-03	Driver Status	Toggle driver to Suspended.	Driver is hidden from the Dispatcher's selection pool.
+7.2. Dispatching & Constraint Logic
+Test Case ID	Feature	Scenario	Expected Result
+UAT-04	Capacity Check	Assign a 6,000kg load to a vehicle with a 5,000kg max capacity.	Error: System blocks dispatch and notifies user of overload.
+UAT-05	Double Booking	Attempt to assign an "On Trip" vehicle to a new dispatch.	Vehicle does not appear in the available dropdown list.
+UAT-06	Status Lifecycle	Move a trip from Draft to Dispatched.	Vehicle and Driver status automatically update to On Trip.
+7.3. Maintenance & Automated Rules
+Test Case ID	Feature	Scenario	Expected Result
+UAT-07	Maintenance Link	Create a "Service Log" (e.g., Brake Repair) for Van-01.	Van-01 status changes to In Shop; it is removed from Dispatcher pool.
+UAT-08	Maintenance Exit	Close the "Service Log" and mark as completed.	Vehicle status returns to Available automatically.
+7.4. Financials & Analytics
+Test Case ID	Feature	Scenario	Expected Result
+UAT-09	Fuel Logging	Enter a fuel receipt (50L for $100) for a completed trip.	Total Operational Cost for that Vehicle ID increases by $100.
+UAT-10	ROI Calculation	Run a report for a vehicle with high maintenance costs.	ROI metric correctly reflects the formula: Revenue−(Maint+Fuel).
+UAT-11	Data Export	Click "Export PDF" on the Analytics page.	A formatted PDF is generated containing all filtered monthly data.
+7.5. Security & RBAC
+Test Case ID	Feature	Scenario	Expected Result
+UAT-12	Role Boundary	Log in as a Dispatcher and attempt to delete a vehicle.	Access Denied: Delete button is hidden or inactive for this role.
+
+8. Technical Database Schema
+
+To support the rule-based logic and financial tracking of the FleetFlow Digital Hub, a Relational Database Management System (RDBMS) like PostgreSQL or MySQL is recommended. This ensures data integrity—specifically, that fuel logs and trips cannot exist without being tied to a valid Vehicle ID.
+8.1. Entity Relationship Diagram (ERD) Logic
+
+The schema is designed around the Vehicle as the primary asset. All other tables (Trips, Maintenance, Fuel) use the vehicle_id as a Foreign Key to enable automated ROI and cost-per-km calculations.
+8.2. Table Definitions
+Table: Vehicles (Assets)
+Column	Data Type	Constraints	Description
+id	UUID	Primary Key	Unique internal identifier.
+license_plate	String	Unique, Not Null	Physical plate number.
+model	String	Not Null	e.g., "Ford Transit", "Volvo FH16".
+max_capacity_kg	Float	Not Null	Used for load validation.
+current_odometer	Float	Default: 0	Updated after every trip.
+status	Enum	[Available, On Trip, In Shop, Retired]	Controls Dispatcher visibility.
+Table: Drivers
+Column	Data Type	Constraints	Description
+id	UUID	Primary Key	Unique identifier.
+full_name	String	Not Null	Driver's name.
+license_expiry	Date	Not Null	Logic: If < current_date, block trip.
+safety_score	Integer	Range 0-100	Calculated from completion rates.
+status	Enum	[On Duty, Off Duty, Suspended]	Availability toggle.
+Table: Trips
+Column	Data Type	Constraints	Description
+id	UUID	Primary Key	Unique trip ID.
+vehicle_id	UUID	Foreign Key	References Vehicles.id.
+driver_id	UUID	Foreign Key	References Drivers.id.
+cargo_weight	Float	Not Null	Must be ≤ Vehicle Max Capacity.
+status	Enum	[Draft, Dispatched, Completed, Cancelled]	Workflow state.
+revenue	Decimal	Not Null	Gross income from the trip.
+Table: Operational_Logs (Maintenance & Fuel)
+Column	Data Type	Constraints	Description
+id	UUID	Primary Key	Unique log ID.
+vehicle_id	UUID	Foreign Key	Links cost to specific asset.
+log_type	Enum	[Fuel, Maintenance]	Categorizes the expense.
+amount_spent	Decimal	Not Null	Financial cost.
+liters	Float	Nullable	Only populated if log_type is 'Fuel'.
+entry_date	Timestamp	Not Null	Date of service or refueling.
+8.3. Core Database Logic & Triggers
+
+    Capacity Trigger: Before an INSERT into the Trips table, the system checks:
+    CargoWeight≤(SELECT max_capacity_kg FROM Vehicles WHERE id=vehicle_id)
+
+    Maintenance Hook: An INSERT into Operational_Logs with log_type = 'Maintenance' triggers an UPDATE on the Vehicles table, setting status = 'In Shop'.
+
+    Odometer Update: Upon a Trip moving to Completed, the current_odometer in the Vehicles table is updated based on the distance logged in the trip details.
+
+9. API Endpoint Specifications
+
+To connect the frontend dashboard with the relational database, the system will use a RESTful API structure. All endpoints (except Login) require an Authorization: Bearer <token> header, with permissions enforced by the user's role.
+9.1. Authentication & Users
+Method	Endpoint	Description	Role Required
+POST	/api/v1/auth/login	Returns JWT and User Role.	Public
+GET	/api/v1/users/profile	Fetches current user details.	All
+9.2. Asset & Driver Management
+Method	Endpoint	Description	Role Required
+GET	/api/v1/vehicles	List all vehicles (filterable by status/type).	All
+POST	/api/v1/vehicles	Add a new vehicle to the registry.	Manager
+PATCH	/api/v1/vehicles/:id	Update status (e.g., "Out of Service").	Manager
+GET	/api/v1/drivers/available	List compliant drivers (not expired/suspended).	Dispatcher
+9.3. Trip & Dispatch Operations
+Method	Endpoint	Description	Role Required
+POST	/api/v1/trips	Create a new trip. Triggers Capacity Check.	Dispatcher
+GET	/api/v1/trips/:id	Fetch specific trip lifecycle details.	All
+PUT	/api/v1/trips/:id/status	Update state: Dispatched → Completed.	Dispatcher
+9.4. Maintenance & Financial Logs
+Method	Endpoint	Description	Role Required
+POST	/api/v1/logs/maintenance	Logs repair. Triggers Vehicle "In Shop" status.	Manager
+POST	/api/v1/logs/fuel	Records fuel cost and liters for a vehicle.	Dispatcher/Manager
+GET	/api/v1/analytics/roi	Returns calculated ROI and fuel efficiency data.	Financial Analyst
+9.5. Example Request/Response Payload
+
+Endpoint: POST /api/v1/trips
+
+Scenario: Dispatcher assigning a load.
+
+Request Body:
+JSON
+
+{
+  "vehicle_id": "v-102",
+  "driver_id": "d-505",
+  "cargo_weight": 450,
+  "origin": "Warehouse A",
+  "destination": "Port B"
+}
+
+Successful Response (201 Created):
+JSON
+
+{
+  "trip_id": "t-9982",
+  "status": "Dispatched",
+  "vehicle_status": "On Trip",
+  "message": "Trip validated and dispatched successfully."
+}
+
+Error Response (400 Bad Request - Capacity Breach):
+JSON
+
+{
+  "error": "CapacityExceeded",
+  "message": "Cargo weight (450kg) exceeds Vehicle v-102 max capacity (400kg)."
+}
+
+10. Conclusion & Project Roadmap
+
+This PRD establishes a robust foundation for the FleetFlow Digital Hub. By automating the relationship between maintenance logs, driver compliance, and trip dispatching, the system eliminates the risks associated with manual logbooks.
+
+    Phase 1: Core Registry & Authentication (MVP)
+
+    Phase 2: Trip Workflow & Dispatch Logic
+
+    Phase 3: Maintenance Automation & Financial Analytics
